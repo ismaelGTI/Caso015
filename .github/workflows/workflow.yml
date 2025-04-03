@@ -34,6 +34,5 @@ jobs:                                                    #Definición de trabajo
           - name: Configurar permisos de ejecución        #Run (Ejecuta comandos de Ubuntu)
             run: chmod +x test/${{ matrix.lista_test }}
 
-
           - name: Ejecutar ${{ matrix.lista_test }}         #Ejecuta cada uno de los archivos de la matriz (test1.sh,test2.sh,test3.sh)
             run: ./test/${{ matrix.lista_test }}            #Ejecucción
