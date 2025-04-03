@@ -1,1 +1,32 @@
-name: CI
+name: CI/CD Microservicio (App)                         #Nombre del workflow
+
+on:                                                     #Eventos que disparan el workflow
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:                                                    #Definición de trabajos
+  build:  
+    runs-on: ubuntu-latest                               #Conteneder ubuntu donde se ejecuta el job
+    steps:                                               #Pasos a seguir
+      - name: Checkout del código                        #Descargar el código
+        uses: actions/checkout@v4                        #Acción que descarga el código del repositorio en donde se ejecutará el workflow (ubuntu)
+    
+      - name: Configurar permisos de ejecución           #Run (Ejecuta comandos de Ubuntu)
+        run: chmod +x test/test*.sh app/app1.sh          #Hace que todos esos archivos sean ejecutables (chmod +x) //En linux los scripts no se ejecután por defecto
+
+      - name: Ejecutar la aplicación
+        run: ./app/app1.sh                               #Ejecuta el script app1.sh dentro la carpeta app
+
+      - name: Ejecutar tests en paralelo                 #Ejección de tests 
+        strategy:
+          matrix:
+            lista_test: [test1.sh, test2.sh, test3.sh]   #Crea 3 Jobs con cada testx
+              Ejecucion_test:                            #Test
+                runs-on: ubuntu-latest
+                steps:
+                  - name: Ejecutar ${{  matrix.lista_test }} #Ejecuta cada uno de los archivos de la matriz (test1.sh,test2.sh,test3.sh)
+                    run: ./test/${{ matrix.lista_test}}      #Ejecucción 
